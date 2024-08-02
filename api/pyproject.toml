@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "fastapi"
+version = "0.1.0"
+description = "Fast API"
+authors = ["Malins062 <6328673@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic-settings = "^2.4.0"
+uvicorn = {extras = ["standart"], version = "^0.30.5"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

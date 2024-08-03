@@ -1,6 +1,5 @@
 import json
 from datetime import datetime
-from uuid import uuid4
 
 from api.app.config import settings
 from api.app.db.engine import db
@@ -22,9 +21,7 @@ async def get_messages(msg_filter=None, skip: int = 0, limit: int = 10):
         msg_filter = {}
     res = []
 
-    cursor = (collection.find(msg_filter).
-              skip(skip).
-              limit(limit))
+    cursor = collection.find(msg_filter).skip(skip).limit(limit)
     if cursor is None:
         return res
 

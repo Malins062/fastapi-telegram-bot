@@ -24,6 +24,7 @@ class ApiPrefix(BaseModel):
 class DatabaseConfig(BaseModel):
     mongo_uri: str = "mongodb://localhost:27017/"
     mongo_db: str = "messages_fastapi"
+    datetime_format: str = "%d.%m.%Y %H:%M:%S"
 
 
 class Settings(BaseSettings):

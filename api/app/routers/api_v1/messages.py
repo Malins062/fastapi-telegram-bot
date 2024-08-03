@@ -19,5 +19,4 @@ routes = [
 
 router = APIRouter(
     routes=routes,
-    tags=["Messages"],
 )

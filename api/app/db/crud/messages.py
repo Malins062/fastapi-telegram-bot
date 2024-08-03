@@ -1,9 +1,9 @@
 import json
 from datetime import datetime
 
-from api.app.db.engine import db
-from api.app.db.models.message import Message, MessageStrType
-from api.app.db.models.user import User
+from ..engine import db
+from ..models.message import Message, MessageStrType
+from ..models.user import User
 from fastapi import HTTPException, Query
 from starlette.status import HTTP_404_NOT_FOUND
 

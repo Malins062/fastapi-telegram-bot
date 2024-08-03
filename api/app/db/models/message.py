@@ -1,4 +1,4 @@
-from api.app.db.models.user import User
+from .user import User
 from pydantic import BaseModel
 
 MessageStrType = str

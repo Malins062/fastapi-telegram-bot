@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from pydantic_settings import (
     BaseSettings,
     SettingsConfigDict,
@@ -11,17 +11,29 @@ class RunConfig(BaseModel):
 
 
 class ApiV1Prefix(BaseModel):
+    """
+    API-V1 settings
+    """
+
     prefix: str = "/v1"
     messages: str = "/messages"
     message: str = "/message"
 
 
 class ApiPrefix(BaseModel):
+    """
+    API settings
+    """
+
     prefix: str = "/api"
     v1: ApiV1Prefix = ApiV1Prefix()
 
 
 class DatabaseConfig(BaseModel):
+    """
+    Database settings
+    """
+
     mongo_uri: str = "mongodb://localhost:27017/"
     mongo_db: str = "messages_fastapi"
 
@@ -30,6 +42,10 @@ class DatabaseConfig(BaseModel):
 
 
 class Settings(BaseSettings):
+    """
+    Main settings
+    """
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,
@@ -39,4 +55,8 @@ class Settings(BaseSettings):
     db: DatabaseConfig = DatabaseConfig()
 
 
-settings = Settings()
+# Setup configuration
+try:
+    settings = Settings()
+except ValidationError:
+    pass

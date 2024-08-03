@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from typing import TypeVar
+
+from pydantic import BaseModel
 
 StrType = TypeVar("StrType", str, None)
 

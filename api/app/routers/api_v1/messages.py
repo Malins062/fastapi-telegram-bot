@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from fastapi.routing import APIRoute
 
 from ...config import settings
-from ...db.crud.messages import get_messages, create_message
+from ...db.crud.messages import create_message, get_messages
 
 routes = [
     APIRoute(

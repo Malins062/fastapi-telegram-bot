@@ -1,9 +1,8 @@
 from typing import Optional
-
-from pydantic import BaseModel, Field
 from uuid import UUID, uuid4
 
 from api.app.db.models.user import User
+from pydantic import BaseModel, Field
 
 MessageStrType = str
 

@@ -66,8 +66,7 @@ async def handle_get_messages(message: types.Message):
             response = requests.get(url, params=params, timeout=TIME_OUT)
             if response.status_code == 200:
                 data = response.json()
-                messages = [msg.get('msg') for msg in data]
-                print(messages)
+                messages = [msg.get("msg") for msg in data]
                 await Message.redis_save_messages(json.dumps(messages))
 
         except requests.Timeout:

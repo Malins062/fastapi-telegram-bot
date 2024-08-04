@@ -4,9 +4,9 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.types import BotCommand, BotCommandScopeDefault
+from db.engine import redis_storage as storage
 
 from .config import settings
-from .db.redis.engine import redis_storage as storage
 from .handlers import router
 from .loggers.logger import init_logger
 
@@ -16,19 +16,11 @@ ALLOWED_UPDATES = ["message", "callback_query", "inline_query"]
 async def start_bot(bot: Bot):
     commands = [
         BotCommand(
-            command="start",
-            description="Стартовая страница бота",
+            command="create_message",
+            description="Создать сообщение",
         ),
         BotCommand(
-            command="help",
-            description="Краткая справочная информация",
-        ),
-        BotCommand(
-            command="send",
-            description="Отправить сообщение",
-        ),
-        BotCommand(
-            command="get_all",
+            command="get_messages",
             description="Получить все сообщения",
         ),
     ]

@@ -7,9 +7,6 @@ def init_logger():
     simple_formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
-    detailed_formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s"
-    )
 
     # ConsoleHandler
     console_handler = logging.StreamHandler()
@@ -18,7 +15,5 @@ def init_logger():
     # BasicConfig
     logging.basicConfig(
         level=logging.INFO,
-        handlers=(
-            console_handler,
-        ),
+        handlers=(console_handler,),
     )

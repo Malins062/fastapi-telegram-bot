@@ -2,9 +2,8 @@ import json
 from enum import Enum
 from typing import Optional, TypeVar
 
-from pydantic import BaseModel, Field
-
 from evtc_bot.db.redis.engine import redis
+from pydantic import BaseModel, Field
 
 StrType = TypeVar("StrType", str, None)
 

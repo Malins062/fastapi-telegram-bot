@@ -5,10 +5,10 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.types import BotCommand, BotCommandScopeDefault
 
-from .loggers.logger import init_logger
 from .config import settings
 from .db.redis.engine import redis_storage as storage
 from .handlers import router
+from .loggers.logger import init_logger
 
 ALLOWED_UPDATES = ["message", "callback_query", "inline_query"]
 

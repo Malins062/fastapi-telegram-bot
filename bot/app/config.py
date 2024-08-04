@@ -1,31 +1,55 @@
-from pydantic import ValidationError
+import os
+
+from dotenv import load_dotenv
+from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+load_dotenv()
 
-class DBSettings(BaseSettings):
+
+class ApiV1Prefix(BaseModel):
     """
-    Database settings
+    Настройка API для версии 1
     """
 
-    redis_url: str = "redis://redis_server:6379/0"
+    prefix: str = "/v1"
+    messages: str = "/messages"
+    message: str = "/message"
+
+
+class Api(BaseModel):
+    """
+    Настройки API
+    """
+
+    prefix: str = "/api"
+    v1: ApiV1Prefix = ApiV1Prefix()
+
+    host: str = os.getenv("HOST", "127.0.0.1")
+    port: int = os.getenv("PORT", 8000)
+
+
+class DBSettings(BaseModel):
+    """
+    Настройки для баз данных
+    """
+
+    redis_url: str = os.getenv("REDIS", "redis://redis_server:6379/0")
 
 
 class Settings(BaseSettings):
     """
-    Main settings
+    Основные настройки
     """
 
     model_config = SettingsConfigDict(
-        env_file=".env",
         case_sensitive=False,
     )
 
-    bot_token: str
+    bot_token: str = os.getenv("BOT_TOKEN")
+    api: Api = Api()
     db: BaseSettings = DBSettings()
 
 
-# Setup configuration
-try:
-    settings = Settings()
-except ValidationError:
-    pass
+# Загрузка конфигурации
+settings = Settings()

@@ -47,6 +47,8 @@ class Settings(BaseSettings):
     )
 
     bot_token: str = os.getenv("BOT_TOKEN")
+    prefixes_command: str = os.getenv("PREFIXES_COMMAND", "!/\\")
+
     api: Api = Api()
     db: BaseSettings = DBSettings()
 

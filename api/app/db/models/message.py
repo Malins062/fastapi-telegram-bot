@@ -7,7 +7,7 @@ MessageStrType = str
 
 class Message(BaseModel):
     """
-    Redis model table for message
+    Mongo model table for message
     """
 
     dt: str

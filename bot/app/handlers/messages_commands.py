@@ -44,6 +44,7 @@ async def process_message(message: types.Message, state: FSMContext):
         return
 
     if response.status_code == 200:
+        await Message.redis_clear_messages()
         await message.reply("Сообщение успешно создано.")
     else:
         await message.reply("Не удалось создать сообщение.")
@@ -51,26 +52,33 @@ async def process_message(message: types.Message, state: FSMContext):
 
 @router.message(Command("get_messages", prefix=settings.prefixes_command))
 async def handle_get_messages(message: types.Message):
-    url = f"{settings.api.host}:{settings.api.port}" + "".join(
-        [settings.api.prefix, settings.api.v1.prefix, settings.api.v1.messages]
-    )
-    params = {
-        "skip": 0,
-        "limit": 100,
-    }
-    try:
-        response = requests.get(url, params=params, timeout=TIME_OUT)
-    except requests.Timeout:
-        await message.reply(f"Сервер не отвечает: {url}")
-        return
+    messages = await Message.redis_get_messages()
 
-    messages = response.json()
-    if not messages or response.status_code != 200:
+    if messages is None:
+        url = f"{settings.api.host}:{settings.api.port}" + "".join(
+            [settings.api.prefix, settings.api.v1.prefix, settings.api.v1.messages]
+        )
+        params = {
+            "skip": 0,
+            "limit": 100,
+        }
+        try:
+            response = requests.get(url, params=params, timeout=TIME_OUT)
+            if response.status_code == 200:
+                data = response.json()
+                messages = [msg.get('msg') for msg in data]
+                print(messages)
+                await Message.redis_save_messages(json.dumps(messages))
+
+        except requests.Timeout:
+            await message.reply(f"Сервер не отвечает: {url}")
+            return
+
+    if not messages:
         await message.reply("Сообщений нет.")
     else:
         for msg in messages:
-            data = msg.get("msg")
-            data = Message.parse_raw(data)
+            data = Message.parse_raw(msg)
             text = (
                 f"Дата и время: {data.dt}!\n"
                 f"Автор: {data.sender.full_name} #{data.sender.id}\n"

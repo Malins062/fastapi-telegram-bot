@@ -1,18 +1,27 @@
-from pydantic import BaseModel, ValidationError
+import os
+
+from dotenv import load_dotenv
+from pydantic import BaseModel
 from pydantic_settings import (
     BaseSettings,
     SettingsConfigDict,
 )
 
+load_dotenv()
+
 
 class RunConfig(BaseModel):
-    host: str = "127.0.0.1"
-    port: int = 8000
+    """
+    Настройки запуска сервера
+    """
+
+    host: str = os.getenv("HOST", "127.0.0.1")
+    port: int = os.getenv("PORT", 8000)
 
 
 class ApiV1Prefix(BaseModel):
     """
-    API-V1 settings
+    Настройка API для версии 1
     """
 
     prefix: str = "/v1"
@@ -20,22 +29,22 @@ class ApiV1Prefix(BaseModel):
     message: str = "/message"
 
 
-class ApiPrefix(BaseModel):
+class ApiPrefix(BaseSettings):
     """
-    API settings
+    Настройки API
     """
 
     prefix: str = "/api"
     v1: ApiV1Prefix = ApiV1Prefix()
 
 
-class DatabaseConfig(BaseModel):
+class DatabaseConfig(BaseSettings):
     """
-    Database settings
+    Настройки БД
     """
 
-    mongo_uri: str = "mongodb://localhost:27017/"
-    mongo_db: str = "messages_fastapi"
+    mongo_uri: str = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+    mongo_db: str = os.getenv("MONGO_DB", "messages_fastapi")
 
     datetime_format: str = "%d.%m.%Y %H:%M:%S"
     pagination_count: int = 10
@@ -43,7 +52,7 @@ class DatabaseConfig(BaseModel):
 
 class Settings(BaseSettings):
     """
-    Main settings
+    Основные настройки
     """
 
     model_config = SettingsConfigDict(
@@ -55,8 +64,5 @@ class Settings(BaseSettings):
     db: DatabaseConfig = DatabaseConfig()
 
 
-# Setup configuration
-try:
-    settings = Settings()
-except ValidationError:
-    pass
+# Установка конфигурации
+settings = Settings()

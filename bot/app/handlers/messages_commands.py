@@ -5,11 +5,8 @@ from aiogram import Router, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram import F
-from aiogram.utils import markdown
-
-from db.models.message import Message
 from config import settings
+from db.models.message import Message
 
 router = Router(name=__name__)
 TIME_OUT = 2.5
@@ -39,7 +36,9 @@ async def process_message(message: types.Message, state: FSMContext):
     params = {"text": message.text}
 
     try:
-        response = requests.post(url, data=json.dumps(data), params=params, timeout=TIME_OUT)
+        response = requests.post(
+            url, data=json.dumps(data), params=params, timeout=TIME_OUT
+        )
     except requests.Timeout:
         await message.reply(f"Сервер не отвечает: {url}")
         return
@@ -70,9 +69,11 @@ async def handle_get_messages(message: types.Message):
         await message.reply("Сообщений нет.")
     else:
         for msg in messages:
-            data = msg.get('msg')
+            data = msg.get("msg")
             data = Message.parse_raw(data)
-            text = f"Дата и время: {data.dt}!\n" \
-                   f"Автор: {data.sender.full_name} #{data.sender.id}\n" \
-                   f"Текст: {data.text}"
+            text = (
+                f"Дата и время: {data.dt}!\n"
+                f"Автор: {data.sender.full_name} #{data.sender.id}\n"
+                f"Текст: {data.text}"
+            )
             await message.answer(text)

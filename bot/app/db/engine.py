@@ -1,5 +1,4 @@
 from aiogram.fsm.storage.redis import RedisStorage
-
 from config import settings
 
 # Redis storage

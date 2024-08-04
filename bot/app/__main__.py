@@ -4,9 +4,9 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.types import BotCommand, BotCommandScopeDefault
+from db.engine import redis_storage as storage
 
 from .config import settings
-from db.engine import redis_storage as storage
 from .handlers import router
 from .loggers.logger import init_logger
 

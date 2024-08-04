@@ -1,6 +1,5 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-![Lint and types](https://github.com/Malins062/fastapi-telegram-bot/actions/workflows/lint_and_types.yml/badge.svg?branch=dev)
 ![Build and publish](https://github.com/Malins062/fasyapi-telegram-bot/actions/workflows/publish.yml/badge.svg?branch=main)
 
 # Web приложение с использованием FastAPI + Телеграм бот 

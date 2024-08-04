@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "web"
+version = "0.1.0"
+description = "Web project"
+authors = ["Malins062 <6328673@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic-settings = "^2.4.0"
+uvicorn = {extras = ["standart"], version = "^0.30.5"}
+fastapi = "^0.112.0"
+motor = "^3.5.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.8.0"
+ruff = "^0.5.6"
+
+[tool.ruff]
+show-fixes = true
+line-length = 120
+lint.select = ["F", "E", "W", "C90", "I", "N", "S", "B", "A", "ISC", "T20", "Q", "PTH"]
+lint.ignore = ["A003"]
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

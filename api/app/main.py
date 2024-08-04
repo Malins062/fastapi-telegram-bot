@@ -1,7 +1,8 @@
 import uvicorn
+from fastapi import FastAPI
+
 from app.config import Settings
 from app.routers import router
-from fastapi import FastAPI
 
 app = FastAPI(
     title="FastAPI messages",

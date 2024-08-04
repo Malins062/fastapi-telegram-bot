@@ -1,5 +1,6 @@
-from .user import User
 from pydantic import BaseModel
+
+from .user import User
 
 MessageStrType = str
 

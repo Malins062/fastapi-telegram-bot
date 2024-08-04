@@ -1,13 +1,14 @@
 import json
 from datetime import datetime
 
-from ..engine import db
-from ..models.message import Message, MessageStrType
-from ..models.user import User
 from fastapi import HTTPException, Query
 from starlette.status import HTTP_404_NOT_FOUND
 
 from app.config import settings
+
+from ..engine import db
+from ..models.message import Message, MessageStrType
+from ..models.user import User
 
 collection = db[Message.ConfigDict.table_name]
 

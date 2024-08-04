@@ -17,7 +17,7 @@ class ApiV1Prefix(BaseModel):
     message: str = "/message"
 
 
-class Api(BaseModel):
+class Api(BaseSettings):
     """
     Настройки API
     """
@@ -29,7 +29,7 @@ class Api(BaseModel):
     port: int = os.getenv("PORT", 8000)
 
 
-class DBSettings(BaseModel):
+class DBSettings(BaseSettings):
     """
     Настройки для баз данных
     """

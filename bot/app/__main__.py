@@ -5,9 +5,10 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.types import BotCommand, BotCommandScopeDefault
 
-from config import settings
-from db.redis.engine import redis_storage as storage
-from handlers import router
+from .loggers.logger import init_logger
+from .config import settings
+from .db.redis.engine import redis_storage as storage
+from .handlers import router
 
 ALLOWED_UPDATES = ["message", "callback_query", "inline_query"]
 
@@ -58,4 +59,6 @@ async def start():
 
 
 if __name__ == "__main__":
+    init_logger()
+
     asyncio.run(start())

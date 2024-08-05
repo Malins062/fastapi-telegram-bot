@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  web:
-      image: malins062/fastapi-web:latest
+  app:
+      image: malins062/fastapi-app:latest
       container_name: fastapi_web
       build:
         context: .api/app
@@ -12,8 +12,10 @@ services:
       depends_on:
         - mongo
       environment:
-        - MONGO_URI=mongodb://mongo:27017/messages
+        - MONGO_URI=mongodb://db_mongo/
       command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+      networks:
+        - netapi
 
   nginx:
       image: nginx:latest
@@ -25,6 +27,8 @@ services:
         - ./nginx.conf:/etc/nginx/nginx.conf
       depends_on:
         - app
+      networks:
+        - netapi
 
   mongo:
       image: mongo:latest
@@ -33,6 +37,8 @@ services:
         - "27017:27017"
       volumes:
         - mongodb_data:/data/db
+      networks:
+        - netapi
 
   redis_server:
       image: redis:latest
@@ -68,16 +74,24 @@ services:
           retries: 5
       tty: true
       stdin_open: true
+      networks:
+        - netapi
 
   telegram-bot:
-        image: malins062/fastapi-telegram-bot:latest
-        container_name: fastapi_telegram_bot
-        restart: "always"
-        stop_signal: SIGINT
-        env_file:
-            -  ./cfg/evtc-telegram-bot/.env
-        depends_on:
-            - redis
+      image: malins062/fastapi-telegram-bot:latest
+      container_name: fastapi_telegram_bot
+      restart: "always"
+      stop_signal: SIGINT
+      env_file:
+          -  ./cfg/evtc-telegram-bot/.env
+      depends_on:
+          - redis
+      networks:
+        - netapi
 
 volumes:
   mongodb_data:
+
+networks:
+  netapi:
+    driver: bridge

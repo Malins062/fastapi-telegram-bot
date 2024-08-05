@@ -1,23 +1,46 @@
-# Используем базовый образ с FastAPI и Uvicorn
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
+#
+# Build image
+#
+FROM python:3.10-slim-bullseye AS builder
 
-# Устанавливаем Nginx
-RUN apt-get update && apt-get install -y nginx
+WORKDIR /app
+COPY pyproject.toml poetry.lock ./
 
-# Устанавливаем MongoDB
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 68818C72E52529D4
-RUN echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list
-RUN apt-get update && apt-get install -y mongodb-org
+ENV POETRY_HOME="/opt/poetry"
+ENV PATH="$POETRY_HOME/bin:$PATH"
 
-# Копируем файлы приложения в контейнер
+# Install poetry
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && curl -sSL https://install.python-poetry.org | python3 -
+
+# Poetry
+RUN poetry config virtualenvs.create false
+RUN poetry config warnings.export false
+RUN poetry install --only main
+RUN poetry self add poetry-plugin-export
+RUN poetry export -f requirements.txt --output requirements.txt
+
+#
+# Prod image
+#
+FROM python:3.10-slim-bullseye AS runtime
+
+# Set time server to Moscow
+ENV TZ=Europe/Moscow
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Copy project
+WORKDIR /app
 COPY ./app /app
+COPY --from=builder /app/requirements.txt /app
 
-# Копируем конфигурацию Nginx
-COPY nginx.conf /etc/nginx/sites-available/default
+# Install requirements
+ENV PIP_ROOT_USER_ACTION=ignore
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Открываем порты для Nginx и Uvicorn
-EXPOSE 80
-EXPOSE 8000
+EXOPOSE 8000
 
-# Запускаем Nginx и MongoDB перед FastAPI
-CMD service nginx start && mongod --fork --logpath /var/log/mongod.log && uvicorn main:app --host 0.0.0.0 --port 8000
+# Run project
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0"]

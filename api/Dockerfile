@@ -40,7 +40,7 @@ ENV PIP_ROOT_USER_ACTION=ignore
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-EXOPOSE 8000
+EXPOSE 8000
 
 # Run project
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0"]

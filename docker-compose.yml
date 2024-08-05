@@ -21,7 +21,7 @@ services:
       image: nginx:latest
       container_name: ngnix
       ports:
-        - "80:80"
+        - "8082:80"
         - "443:443"
       volumes:
         - ./nginx.conf:/etc/nginx/nginx.conf

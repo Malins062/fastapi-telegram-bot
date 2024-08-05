@@ -40,7 +40,7 @@ services:
       networks:
         - netapi
 
-  redis_server:
+  redis:
       image: redis:latest
       container_name: db_redis
       restart: "always"

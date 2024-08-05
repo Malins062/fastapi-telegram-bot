@@ -32,7 +32,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Copy project
 WORKDIR /app
-COPY aoo /app/bot
+COPY ./app /app/bot
 COPY --from=builder /app/requirements.txt /app
 
 # Install requirements

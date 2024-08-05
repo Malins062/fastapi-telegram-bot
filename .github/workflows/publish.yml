@@ -18,22 +18,16 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Publish to Registry
+    - name: Publish to Registry Telegram-bot
       uses: docker/build-push-action@v2
       with:
-        context: ./
+        context: ./bot/
         push: true
         tags: malins062/fastapi-telegram-bot:latest
 
-#    - name: Deploy evtc_bot
-#      uses: dawidd6/action-ansible-playbook@v2
-#      with:
-#        playbook: deploy.yml
-#        directory: ./
-##        key: ${{secrets.KART_SSH_PRIV_KEY}}
-#        inventory: |
-#          [all]
-#          176.118.214.202 ansible_become_user=${{secrets.KART_ANSIBLE_BECOME_USER}} ansible_become_password=${{secrets.KART_ANSIBLE_BECOME_PASSWORD}}
-##          176.118.214.202 ansible_ssh_user=${{secrets.KART_SSH_USER}} ansible_become_user=${{secrets.KART_ANSIBLE_BECOME_USER}} ansible_become_password=${{secrets.KART_ANSIBLE_BECOME_PASSWORD}}
-#        options: |
-#          --verbose
+    - name: Publish to Registry FastAPI-app
+      uses: docker/build-push-action@v2
+      with:
+        context: ./api/
+        push: true
+        tags: malins062/fastapi-app:latest
